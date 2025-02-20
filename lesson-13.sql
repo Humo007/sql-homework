@@ -24,7 +24,7 @@ SELECT Year1,
 FROM TestMax
 
 --Task 2
-CREATE TABLE Employeess
+;CREATE TABLE Employeess
 (EmpID INT, EmpName VARCHAR(20), ReportsTo INT)
  
 --Insert Data
@@ -51,15 +51,15 @@ SELECT 19, 'Jessica', 10
 
 SELECT *FROM Employeess
 
-WITH CTE AS (
+;WITH CTE AS (
             SELECT EmpName, EmpID, ReportsTo, 0  AS Level,
-			CAST(EmpName AS VARCHAR(MAX)) AS FullyQualifiedName
+			CAST('.' + EmpName + '.' AS VARCHAR(MAX)) AS FullyQualifiedName
 			FROM Employeess 
 			WHERE ReportsTo IS NULL
          UNION ALL
 		    SELECT E.EmpName, E.EmpID, E.ReportsTo,CTE.Level+1,
-			CAST(CTE.FullyQualifiedName +'.'+ E.EmpName AS VARCHAR(MAX)) 
+			CAST(CTE.FullyQualifiedName + E.EmpName AS VARCHAR(MAX)) 
 			FROM Employeess AS E
 			INNER JOIN CTE ON E.ReportsTo = CTE.EmpID)
 
-SELECT EmpName AS Hierarchy, EmpID AS Hierarchy, EmpName, EmpID, Level, FullyQualifiedName  FROM CTE
+SELECT SPACE(Level*4) + EmpName AS Hierarchy,SPACE(level *4) + CAST(cte.EmpID as varchar(max)) as Hierarchy, EmpName, EmpID, Level, FullyQualifiedName  FROM CTE
